@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1108</width>
+    <height>568</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>1091</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="img_cover">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="Games">
+       <item>
+        <widget class="QLabel" name="label_games">
+         <property name="text">
+          <string>Games</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="list_games">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_addGame">
+         <property name="text">
+          <string>Add Game</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="Backups">
+       <item>
+        <widget class="QLabel" name="label_paths">
+         <property name="text">
+          <string>Paths</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="list_paths"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="buttons_paths">
+         <item>
+          <widget class="QPushButton" name="button_addPath">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="button_changePath">
+           <property name="text">
+            <string>Change</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="button_deletePath">
+           <property name="text">
+            <string>Delete</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_backups">
+         <property name="text">
+          <string>Backups</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="list_backups"/>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
+         </property>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="button_renameBackup">
+           <property name="text">
+            <string>Rename</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QPushButton" name="button_restoreBackup">
+           <property name="text">
+            <string>Restore</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="button_addBackup">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QPushButton" name="button_deleteBackup">
+           <property name="text">
+            <string>Delete</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="buttons_backups"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1108</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuGummy_Saver">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOptions"/>
+    <addaction name="actionBrowse_Backup_Folder"/>
+   </widget>
+   <addaction name="menuGummy_Saver"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options</string>
+   </property>
+  </action>
+  <action name="actionBrowse_Backup_Folder">
+   <property name="text">
+    <string>Browse Backup Folder</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
