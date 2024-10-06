@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "games/gamelist.h"
+#include <QListWidgetItem>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -15,11 +17,18 @@ class MainWindow : public QMainWindow {
   public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    GameList game_list;
 
   private slots:
     void on_button_addGame_clicked();
 
+    void on_list_games_currentItemChanged(QListWidgetItem *current,
+                                          QListWidgetItem *previous);
+
+    void on_button_addPath_clicked();
+
   private:
     Ui::MainWindow *ui;
+    void refresh_game_list();
 };
 #endif // MAINWINDOW_H

@@ -15,18 +15,22 @@ struct Backup {
 };
 
 class GameHandler {
-  public:
-    GameHandler();
-
+  private:
     QPixmap *boxart;
     QString boxart_path;
     QVector<QString> paths;
     QVector<Backup> backup_list;
 
+  public:
+    GameHandler();
+    QString title;
+    // Update the games box are with the image at the given path
     void update_boxart(QString imgpath);
 
+    // Add and remove files/folders for this game to backup
     void add_path(QString path);
     void remove_path(int index);
+    // Add and remove game backups
     void add_backup(QString name);
     void remove_backup(int index);
 };

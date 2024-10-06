@@ -1,6 +1,6 @@
 #include "gamehandler.h"
 
-GameHandler::GameHandler() { boxart = new QPixmap(boxart_path); }
+GameHandler::GameHandler() { /*boxart = new QPixmap(boxart_path);*/ }
 
 void GameHandler::update_boxart(QString imgpath) {
     QFile image(imgpath);
