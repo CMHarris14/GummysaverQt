@@ -8,6 +8,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    QStringList labels = {"Name", "Date"};
+    ui->list_backups->setHorizontalHeaderLabels(labels);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -35,8 +37,22 @@ void MainWindow::refresh_game_list() {
     ui->list_games->addItems(this->game_list.get_game_titles());
 }
 
+void MainWindow::refresh_path_list() {
+    for (const QString &path : game_list[working_game_index].get_paths()) {
+        ui->list_paths->addItem(path);
+    }
+}
+
+void MainWindow::refresh_backup_list() {
+    for (const Backup &backup : game_list[working_game_index].get_backups()) {
+    }
+}
+
 void MainWindow::on_list_games_currentItemChanged(QListWidgetItem *current,
-                                                  QListWidgetItem *previous) {}
+                                                  QListWidgetItem *previous) {
+    this->working_game_index = ui->list_games->currentRow();
+    refresh_path_list();
+}
 
 void MainWindow::on_button_addPath_clicked() {
     // this->game_list.save_database();

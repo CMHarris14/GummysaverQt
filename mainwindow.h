@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow {
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     GameList game_list;
+    int working_game_index;
 
   private slots:
     void on_button_addGame_clicked();
@@ -30,5 +31,7 @@ class MainWindow : public QMainWindow {
   private:
     Ui::MainWindow *ui;
     void refresh_game_list();
+    void refresh_path_list();
+    void refresh_backup_list();
 };
 #endif // MAINWINDOW_H

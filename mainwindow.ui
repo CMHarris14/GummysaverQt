@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1108</width>
-    <height>568</height>
+    <width>1117</width>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,7 +104,28 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="list_backups"/>
+        <widget class="QTableWidget" name="list_backups">
+         <property name="textElideMode">
+          <enum>Qt::TextElideMode::ElideRight</enum>
+         </property>
+         <property name="columnCount">
+          <number>2</number>
+         </property>
+         <attribute name="horizontalHeaderVisible">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>500</number>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <column/>
+         <column/>
+        </widget>
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
@@ -154,7 +175,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1108</width>
+     <width>1117</width>
      <height>21</height>
     </rect>
    </property>

@@ -30,9 +30,12 @@ class GameHandler {
     // Add and remove files/folders for this game to backup
     void add_path(QString path);
     void remove_path(int index);
+    QVector<QString> get_paths();
     // Add and remove game backups
     void add_backup(QString name);
     void remove_backup(int index);
+    QVector<Backup> get_backups();
+    Backup &backup_at(int index);
 };
 
 #endif // GAMEHANDLER_H
