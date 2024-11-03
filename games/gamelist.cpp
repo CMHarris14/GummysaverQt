@@ -22,8 +22,7 @@ QVector<QString> GameList::get_game_titles() {
 }
 
 // Return the handler for a game of given title if it exists
-std::optional<std::reference_wrapper<GameHandler>>
-GameList::game_by_title(QString title) {
+std::optional<std::reference_wrapper<GameHandler>> GameList::game_by_title(QString title) {
     for (GameHandler &game : game_list) {
         if (game.title == title) {
             return game;
@@ -43,10 +42,5 @@ std::optional<int> GameList::index_by_title(QString title) {
 }
 
 void GameList::save_database() {
-    try {
-        SQLite::Database db("GameData.db3",
-                            SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
-    } catch (SQLite::Exception e) {
-        Logger::log(Logger::ERROR, e.what());
-    }
+    // TODO
 }

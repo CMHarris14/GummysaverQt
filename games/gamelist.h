@@ -2,6 +2,7 @@
 #define GAMELIST_H
 
 #include "../util/exceptions.cpp"
+#include "../util/gamedb.h"
 #include "gamehandler.h"
 
 #include <SQLiteCpp/SQLiteCpp.h>
@@ -9,6 +10,7 @@
 class GameList {
   private:
     QVector<GameHandler> game_list;
+    gamedb database;
 
   public:
     GameList();
