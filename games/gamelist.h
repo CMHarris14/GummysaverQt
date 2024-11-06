@@ -3,33 +3,40 @@
 
 #include "../util/exceptions.cpp"
 #include "../util/gamedb.h"
-#include "gamehandler.h"
+#include <QDateTime>
+// #include "gamehandler.h"
 
 #include <SQLiteCpp/SQLiteCpp.h>
 
+struct Backup {
+    Backup(QString name, QDateTime time) {
+        this->name = name;
+        this->time = time;
+    }
+    QString name;
+    QDateTime time;
+};
+
 class GameList {
   private:
-    QVector<GameHandler> game_list;
     gamedb database;
 
   public:
     GameList();
-    // Overloads to treat the class as a vector
-    GameHandler &operator[](int index) { return game_list[index]; }
-    auto begin() { return game_list.begin(); }
-    auto end() { return game_list.end(); }
 
     // Add a new game to manage. Titles must be unique
-    void add_game(QString title);
+    void add_game(QString &title);
+    // Delete game and all related data
+    void delete_game(QString &title);
+
+    void add_path(QString &game, QString &path);
+    void delete_path(const QString &game, const QString &path);
+    QVector<QString> get_paths(QString &game);
+
+    QString get_image_path(QString &game);
+    void update_game_image(QString &game, QString &path);
     // Returns the titles of every managed game
     QVector<QString> get_game_titles();
-
-    std::optional<std::reference_wrapper<GameHandler>>
-    game_by_title(QString title);
-
-    std::optional<int> index_by_title(QString title);
-
-    void save_database();
 };
 
 #endif // GAMELIST_H

@@ -27,7 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GummySaver
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        games/gamehandler.h games/gamehandler.cpp
+
         games/gamelist.h games/gamelist.cpp
         util/exceptions.cpp
         conanfile.txt

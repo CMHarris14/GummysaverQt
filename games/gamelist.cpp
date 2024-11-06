@@ -3,44 +3,31 @@
 
 GameList::GameList() {}
 
-void GameList::add_game(QString title) {
-    if (!get_game_titles().contains(title)) {
-        GameHandler new_game;
-        new_game.title = title;
-        this->game_list.push_back(new_game);
+void GameList::add_game(QString &title) {
+    QVector<QString> current_games = database.get_games();
+    if (!current_games.contains(title)) {
+        database.add_game(title.toStdString());
     } else {
-        throw CustomException(CustomException::DuplicateTitle);
+        throw CustomException::DuplicateTitle;
     }
 }
 
-QVector<QString> GameList::get_game_titles() {
-    QVector<QString> titles;
-    for (GameHandler &game : this->game_list) {
-        titles.push_back(game.title);
-    }
-    return titles;
+void GameList::delete_game(QString &title) { database.delete_game(title.toStdString()); }
+
+void GameList::add_path(QString &game, QString &path) {
+    database.add_path(game.toStdString(), path.toStdString());
 }
 
-// Return the handler for a game of given title if it exists
-std::optional<std::reference_wrapper<GameHandler>> GameList::game_by_title(QString title) {
-    for (GameHandler &game : game_list) {
-        if (game.title == title) {
-            return game;
-        }
-    }
-    return std::nullopt;
+void GameList::delete_path(const QString &game, const QString &path) {
+    database.delete_path(game.toStdString(), path.toStdString());
 }
 
-// Get the index of a game by the title if it exists
-std::optional<int> GameList::index_by_title(QString title) {
-    for (int i = 0; i < game_list.length(); i++) {
-        if (game_list[i].title == title) {
-            return i;
-        }
-    }
-    return std::nullopt;
+QVector<QString> GameList::get_paths(QString &game) { return database.get_paths(game.toStdString()); }
+
+QString GameList::get_image_path(QString &game) { return database.get_image_path(game.toStdString()); }
+
+void GameList::update_game_image(QString &game, QString &path) {
+    database.update_game_image(game.toStdString(), path.toStdString());
 }
 
-void GameList::save_database() {
-    // TODO
-}
+QVector<QString> GameList::get_game_titles() { return database.get_games(); }

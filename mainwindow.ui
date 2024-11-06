@@ -74,16 +74,16 @@
        <item>
         <layout class="QHBoxLayout" name="buttons_paths">
          <item>
-          <widget class="QPushButton" name="button_addPath">
+          <widget class="QPushButton" name="button_addFile">
            <property name="text">
-            <string>Add</string>
+            <string>Add File</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="button_changePath">
+          <widget class="QPushButton" name="button_addPath">
            <property name="text">
-            <string>Change</string>
+            <string>Add Directory</string>
            </property>
           </widget>
          </item>
