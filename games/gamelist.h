@@ -1,6 +1,7 @@
 #ifndef GAMELIST_H
 #define GAMELIST_H
 
+#include "../util/archiver.h"
 #include "../util/exceptions.cpp"
 #include "../util/gamedb.h"
 #include <QDateTime>
@@ -20,23 +21,25 @@ struct Backup {
 class GameList {
   private:
     gamedb database;
+    archiver archives;
 
   public:
     GameList();
 
-    // Add a new game to manage. Titles must be unique
     void add_game(QString &title);
-    // Delete game and all related data
     void delete_game(QString &title);
+    QStringList get_game_titles();
 
     void add_path(QString &game, QString &path);
     void delete_path(const QString &game, const QString &path);
-    QVector<QString> get_paths(QString &game);
+    QStringList get_paths(QString &game);
 
-    QString get_image_path(QString &game);
+    std::optional<QString> get_image_path(QString &game);
     void update_game_image(QString &game, QString &path);
-    // Returns the titles of every managed game
-    QVector<QString> get_game_titles();
+
+    void make_game_backup(QString &title, QString &backup_name);
+    void delete_game_backup(QString &title, const QString &backup_name);
+    QList<Backup> get_game_backups(QString &title);
 };
 
 #endif // GAMELIST_H

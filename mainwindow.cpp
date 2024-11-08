@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow() { delete ui; }
 
-// Add a new game
+// Add game button
 void MainWindow::on_button_addGame_clicked() {
     bool ok;
     QString name = QInputDialog::getText(this, "Add Game", "Enter game name", QLineEdit::Normal, "", &ok);
@@ -53,17 +53,29 @@ void MainWindow::refresh_path_list() {
 }
 
 void MainWindow::refresh_backup_list() {
-    // for (const Backup &backup : game_list.get_backups()) {
-    // }
+    ui->list_backups->setRowCount(0);
+    QList<Backup> backup_files = game_list.get_game_backups(this->working_game);
+    for (int i = 0; i < backup_files.size(); ++i) {
+        const Backup backup = backup_files[i];
+
+        ui->list_backups->insertRow(i);
+
+        QTableWidgetItem *nameItem = new QTableWidgetItem(backup.name);
+        QTableWidgetItem *dateItem = new QTableWidgetItem(backup.time.toString("yyyy-MM-dd HH:mm"));
+
+        ui->list_backups->setItem(i, 0, nameItem);
+        ui->list_backups->setItem(i, 1, dateItem);
+    }
 }
 
-// Event when selected game changes
+// Selected game changes
 void MainWindow::on_list_games_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous) {
     this->working_game = ui->list_games->currentItem()->text();
     refresh_path_list();
+    refresh_backup_list();
 }
 
-// Add a directory to a games backup list
+// Add directory button
 void MainWindow::on_button_addPath_clicked() {
     QString selectedPath = QFileDialog::getExistingDirectory(this, "Select Directory", QString());
     if (QFileInfo(selectedPath).isDir()) {
@@ -74,7 +86,7 @@ void MainWindow::on_button_addPath_clicked() {
     refresh_path_list();
 }
 
-// Add a single file to a games backup list
+// Add file button
 void MainWindow::on_button_addFile_clicked() {
     QString selectedFile =
         QFileDialog::getOpenFileName(this, "Select File or Folder", QString(), "All Files (*)");
@@ -87,10 +99,41 @@ void MainWindow::on_button_addFile_clicked() {
     refresh_path_list();
 }
 
+// Delete path button
 void MainWindow::on_button_deletePath_clicked() {
     QList<QListWidgetItem *> selected = ui->list_paths->selectedItems();
     for (QListWidgetItem *item : selected) {
         this->game_list.delete_path(this->working_game, item->text());
     }
     refresh_path_list();
+}
+
+// Add backup button
+void MainWindow::on_button_addBackup_clicked() {
+    bool ok;
+    QString name = QInputDialog::getText(this, "Add Backup", "Enter backup name", QLineEdit::Normal, "", &ok);
+
+    if (ok && !name.isEmpty()) {
+        try {
+            this->game_list.make_game_backup(working_game, name);
+        } catch (const CustomException &e) {
+            QMessageBox::warning(this, "Error", e.what());
+        }
+    } else if (name.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Name cannot be empty");
+    }
+    this->refresh_backup_list();
+}
+
+void MainWindow::on_button_deleteBackup_clicked() {
+    int row = ui->list_backups->currentRow();
+    if (row == -1) {
+        return;
+    }
+
+    QTableWidgetItem *nameItem = ui->list_backups->item(row, 0);
+    if (nameItem) {
+        game_list.delete_game_backup(this->working_game, nameItem->text());
+    }
+    refresh_backup_list();
 }

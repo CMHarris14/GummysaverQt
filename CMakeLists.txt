@@ -33,6 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         conanfile.txt
         util/logger.h util/logger.cpp
         util/gamedb.h util/gamedb.cpp
+        util/archiver.h util/archiver.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GummySaver APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

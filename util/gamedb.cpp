@@ -100,8 +100,8 @@ int gamedb::get_id_by_name(const std::string &name) {
 }
 
 // Get all game names as a list of strings
-QVector<QString> gamedb::get_games() {
-    QVector<QString> games;
+QStringList gamedb::get_games() {
+    QStringList games;
 
     try {
         SQLite::Statement query(db, "SELECT Name FROM Games");
@@ -122,8 +122,8 @@ QVector<QString> gamedb::get_games() {
 }
 
 // Get all paths associated with the given game
-QVector<QString> gamedb::get_paths(const std::string &name) {
-    QVector<QString> paths;
+QStringList gamedb::get_paths(const std::string &name) {
+    QStringList paths;
 
     try {
         int game_id = get_id_by_name(name);

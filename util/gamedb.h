@@ -19,8 +19,8 @@ class gamedb {
 
     int get_id_by_name(const std::string &name);
 
-    QVector<QString> get_games();
-    QVector<QString> get_paths(const std::string &name);
+    QStringList get_games();
+    QStringList get_paths(const std::string &name);
     QString get_image_path(const std::string &game);
 
     void update_game_image(const std::string &game, const std::string &path);
