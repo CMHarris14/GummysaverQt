@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "util/logger.h"
+#include "widget/backuprestore.h"
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QInputDialog>
@@ -113,6 +114,15 @@ void MainWindow::on_button_addBackup_clicked() {
     bool ok;
     QString name = QInputDialog::getText(this, "Add Backup", "Enter backup name", QLineEdit::Normal, "", &ok);
 
+    // Make sure backup name is unique to prevent file conflicts
+    QList<Backup> backup_files = game_list.get_game_backups(this->working_game);
+    for (Backup &backup : backup_files) {
+        if (backup.name == name) {
+            QMessageBox::warning(this, "Warning", "Backup name must be unique");
+            return;
+        }
+    }
+    // Only create the backup if the name isn't an empty string
     if (ok && !name.isEmpty()) {
         try {
             this->game_list.make_game_backup(working_game, name);
@@ -125,15 +135,35 @@ void MainWindow::on_button_addBackup_clicked() {
     this->refresh_backup_list();
 }
 
+// Delete backup button
 void MainWindow::on_button_deleteBackup_clicked() {
     int row = ui->list_backups->currentRow();
-    if (row == -1) {
+    if (row == -1)
         return;
-    }
 
     QTableWidgetItem *nameItem = ui->list_backups->item(row, 0);
     if (nameItem) {
         game_list.delete_game_backup(this->working_game, nameItem->text());
     }
     refresh_backup_list();
+}
+
+void MainWindow::on_button_renameBackup_clicked() {}
+
+void MainWindow::on_button_restoreBackup_clicked() {
+    int row = ui->list_backups->currentRow();
+    if (row == -1)
+        return;
+
+    QTableWidgetItem *nameItem = ui->list_backups->item(row, 0);
+    if (nameItem) {
+        QList<QPair<QString, QString>> tmp =
+            game_list.get_backup_metadata(this->working_game, nameItem->text());
+
+        BackupRestore restore_dialog(this, &tmp);
+
+        if (restore_dialog.exec() == QDialog::Accepted) {
+            game_list.restore_backup(this->working_game, nameItem->text(), tmp);
+        }
+    }
 }

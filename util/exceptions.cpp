@@ -2,7 +2,7 @@
 
 class CustomException : public std::exception {
   public:
-    enum ErrorType { DuplicateTitle, NoFilePath, DBError, CompressionFailure, NoWriteAccess };
+    enum ErrorType { DuplicateTitle, NoFilePath, DBError, CompressionFailure, NoWriteAccess, CorruptArchive };
 
     CustomException(ErrorType type_) : type(type_) {}
 
@@ -18,6 +18,8 @@ class CustomException : public std::exception {
             return "7zip encountered an error. Check the logs for more info";
         case NoWriteAccess:
             return "File cannot be written to";
+        case CorruptArchive:
+            return "META file in archive has errors. Backup is likely corrupt";
         }
     }
 

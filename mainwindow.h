@@ -36,6 +36,10 @@ class MainWindow : public QMainWindow {
 
     void on_button_deleteBackup_clicked();
 
+    void on_button_renameBackup_clicked();
+
+    void on_button_restoreBackup_clicked();
+
   private:
     Ui::MainWindow *ui;
     void refresh_game_list();

@@ -5,7 +5,8 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
-#include <sstream>
+#include <stdexcept>
+// #include <sstream>
 
 archiver::archiver() {
     // Set correct command to use depending on OS
@@ -18,16 +19,14 @@ archiver::archiver() {
     }
 }
 
-void archiver::make_backup(QString game, QString backup_name, const QStringList &paths) {
+void archiver::make_backup(const QString &game, const QString &backup_name, const QStringList &paths) {
     QProcess process;
 
     // Format path for the backup file
-    std::ostringstream backup_path;
-    backup_path << backup_dir.toStdString() << game.toStdString() << "\\" << backup_name.toStdString();
-
+    QString backup_path = backup_dir + game + "\\" + backup_name;
     // Gather arguments for backup path and files to add to archive
     QStringList arguments;
-    arguments << "a" << QString::fromStdString(backup_path.str());
+    arguments << "a" << backup_path;
     for (const QString &path : paths) {
         arguments << path;
     }
@@ -50,6 +49,83 @@ void archiver::make_backup(QString game, QString backup_name, const QStringList 
 
     QFile file("META");
     file.remove();
+
+    if (process.exitStatus() != QProcess::NormalExit) {
+        QString message = "7zip compression failed with error " + QString::number(process.exitCode());
+        Logger::log(Logger::ERROR, message.toStdString());
+        throw(CustomException::CompressionFailure);
+    }
+}
+
+// Gets the META file from a backup archive and returns a list of pairs relating
+// the backup files to their original paths
+QList<QPair<QString, QString>> archiver::get_path_info(const QString &game, const QString &backup_name) {
+    QProcess process;
+
+    QString backup_path = backup_dir + game + "\\" + backup_name + ".7z";
+    QStringList arguments;
+    arguments << "e" << "-y" << backup_path << "META";
+
+    // Set process data
+    process.setProgram(zipper);
+    process.setArguments(arguments);
+
+    qDebug() << "Fetching META with arguments:";
+    for (QString &arg : arguments) {
+        qDebug() << arg;
+    }
+
+    // Start META extraction
+    process.start();
+    process.waitForFinished();
+
+    if (process.exitStatus() != QProcess::NormalExit) {
+        QString message = "7zip compression failed with error " + QString::number(process.exitCode());
+        Logger::log(Logger::ERROR, message.toStdString());
+        throw(CustomException::CompressionFailure);
+    }
+
+    // Check if the file exists
+    QFile file("META");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw("Cannot read META file");
+    }
+
+    QList<QPair<QString, QString>> path_list;
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        if (line.isEmpty())
+            continue; // Skip empty lines. Should never happen but just in case
+
+        // Split at :
+        int last_colon = line.lastIndexOf(':'); // Stupid windows making this harder than needed
+        QString full_path = line.left(last_colon);
+        QString file_name = line.right(line.size() - last_colon - 1);
+        path_list.append(qMakePair(full_path, file_name));
+    }
+
+    file.remove();
+    return path_list;
+}
+
+void archiver::extract_backup(const QString &game, const QString &backup_name) {
+    QProcess process;
+
+    QString backup_path = backup_dir + game + "\\" + backup_name + ".7z";
+    QStringList arguments;
+    arguments << "x" << "-y" << backup_path << "-o./temp";
+
+    process.setProgram(zipper);
+    process.setArguments(arguments);
+
+    qDebug() << "Extracting backup with arguments:";
+    for (QString &arg : arguments) {
+        qDebug() << arg;
+    }
+
+    process.start();
+    process.waitForFinished();
 
     if (process.exitStatus() != QProcess::NormalExit) {
         QString message = "7zip compression failed with error " + QString::number(process.exitCode());
