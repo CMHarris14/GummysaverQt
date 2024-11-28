@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "util/logger.h"
+// #include "util/logger.h"
 #include "widget/backuprestore.h"
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QInputDialog>
@@ -47,9 +48,7 @@ void MainWindow::refresh_game_list() {
 
 void MainWindow::refresh_path_list() {
     ui->list_paths->clear();
-    for (const QString &path : game_list.get_paths(this->working_game)) {
-        ui->list_paths->addItem(path);
-    }
+    ui->list_paths->addItems(game_list.get_paths(this->working_game));
     enable_buttons();
 }
 
@@ -165,5 +164,26 @@ void MainWindow::on_button_restoreBackup_clicked() {
         if (restore_dialog.exec() == QDialog::Accepted) {
             game_list.restore_backup(this->working_game, nameItem->text(), tmp);
         }
+    }
+}
+
+void MainWindow::on_actionBrowse_Backup_Folder_triggered() {
+    QUrl path = QUrl::fromLocalFile(QDir(".\\backups\\").absolutePath());
+    QDesktopServices::openUrl(path);
+}
+
+// Context menu for selected game
+void MainWindow::on_list_games_customContextMenuRequested(const QPoint &pos) {
+    QPoint globalPos = mapToGlobal(pos);
+
+    QMenu contextMenu;
+
+    QAction *actionDelete = contextMenu.addAction("Delete Game");
+
+    QAction *selectedAction = contextMenu.exec(globalPos);
+
+    if (selectedAction == actionDelete) {
+        game_list.delete_game(ui->list_games->selectedItems().toList()[0]->text());
+        refresh_game_list();
     }
 }

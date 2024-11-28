@@ -40,6 +40,10 @@ class MainWindow : public QMainWindow {
 
     void on_button_restoreBackup_clicked();
 
+    void on_actionBrowse_Backup_Folder_triggered();
+
+    void on_list_games_customContextMenuRequested(const QPoint &pos);
+
   private:
     Ui::MainWindow *ui;
     void refresh_game_list();
