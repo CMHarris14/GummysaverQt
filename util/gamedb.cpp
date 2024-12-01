@@ -1,6 +1,7 @@
 #include "gamedb.h"
 #include "exceptions.cpp"
 #include "logger.h"
+#include <QDebug>
 #include <iostream>
 #include <sstream>
 
@@ -83,7 +84,6 @@ void gamedb::delete_game(const std::string &name) {
 
             transaction.commit();
         }
-
     } catch (const SQLite::Exception &e) {
         Logger::log(Logger::ERROR, e.what());
     }

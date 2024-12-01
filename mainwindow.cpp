@@ -8,6 +8,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QString>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -42,13 +43,17 @@ void MainWindow::on_button_addGame_clicked() {
 }
 
 void MainWindow::refresh_game_list() {
+    // Signals have to be blocked while clearing or the context menu delete casuses a crash
+    ui->list_games->blockSignals(true);
     ui->list_games->clear();
+    ui->list_games->blockSignals(false);
     ui->list_games->addItems(this->game_list.get_game_titles());
 }
 
 void MainWindow::refresh_path_list() {
     ui->list_paths->clear();
     ui->list_paths->addItems(game_list.get_paths(this->working_game));
+
     enable_buttons();
 }
 
@@ -174,7 +179,7 @@ void MainWindow::on_actionBrowse_Backup_Folder_triggered() {
 
 // Context menu for selected game
 void MainWindow::on_list_games_customContextMenuRequested(const QPoint &pos) {
-    QPoint globalPos = mapToGlobal(pos);
+    QPoint globalPos = ui->list_games->mapToGlobal(pos);
 
     QMenu contextMenu;
 
